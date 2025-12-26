@@ -2,194 +2,326 @@
 <html lang="si">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zycredit Advanced App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>eZycredit – Loan Calculator</title>
+<meta name="theme-color" content="#16c172">
+
 <style>
 :root{
-  --green-start:#16c172;
-  --green-end:#0aa764;
-  --bg:#f7fbfb;
+  --green:#16c172;
+  --green-dark:#0aa764;
+  --green-soft:#e9f7f1;
+  --bg:#f4f8f8;
   --card:#ffffff;
-  --muted:#8b98a0;
+  --text-main:#0c1328;
+  --text-muted:#8b98a0;
 }
-html,body{margin:0;padding:0;font-family:"Segoe UI", Roboto, "Noto Sans", Arial,sans-serif;background:var(--bg);height:100%;}
-.app{display:flex;flex-direction:column;height:100vh;width:100%;position:relative;}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-.brand{display:flex;align-items:center;gap:10px;}
-.logo-mark{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--green-start),var(--green-end));color:#fff;font-weight:700;display:flex;justify-content:center;align-items:center;font-size:18px;box-shadow:0 4px 10px rgba(10,167,100,0.2);}
-.brand-text{ font-weight:700; font-size:18px;}
-.scroll-container{overflow-y:auto;padding:16px;flex:1;}
-.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,0.08);}
-.headline{font-size:20px;font-weight:800;text-align:center;margin-bottom:8px;}
-.sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:12px;}
-.hero{
-  width:100%;
-  border-radius:10px;
-  margin-bottom:16px;
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:"Segoe UI","Noto Sans Sinhala",sans-serif;
+  background:var(--bg);
+  color:var(--text-main);
+}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;
+  top:0;
+  background:#fff;
+  padding:12px 14px;
   display:flex;
-  justify-content:flex-start;
   align-items:center;
-  text-align:left;
-  padding:20px;
-  font-weight:700;
-  font-size:18px;
+  box-shadow:0 3px 10px rgba(0,0,0,.05);
+  z-index:10;
+}
+.logo{display:flex;gap:10px;align-items:center;}
+.logo-box{
+  width:42px;height:42px;
+  background:#fff;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.logo-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:10px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  margin:14px;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(90deg,var(--green),var(--green-dark));
   color:#fff;
-  background: linear-gradient(-45deg,#3fb88f,#1da36b,#16c172,#0aa764);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  padding:22px;
+  border-radius:14px;
+  text-align:center;
+  font-weight:800;
 }
-@keyframes gradientBG{
-  0%{background-position:25% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:25% 50%}
+
+/* RANGE */
+.amount{
+  display:flex;
+  justify-content:space-between;
+  font-weight:700;
+  margin:16px 0 6px;
 }
-.slider-row{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
-.amount-display{display:flex;justify-content:space-between;align-items:center;}
-.amount-display .label{font-weight:700;font-size:16px;}
-.amount-display .value{font-weight:800;font-size:16px;}
-input[type="range"]{-webkit-appearance:none;width:100%;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--green-start),var(--green-end));outline:none;transition: background 0.3s;}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:6px solid #0aa764;box-shadow:0 4px 10px rgba(10,167,100,0.25);cursor:pointer;}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
-.result-box{background:#f6f9f8;padding:10px;border-radius:10px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:0.3s;}
-.result-box .r-label{font-size:12px;color:var(--muted);margin-bottom:4px;}
-.result-box .r-value{font-size:16px;font-weight:800;color:#0b3a2d;}
-.result-box.full-row{grid-column:1/-1;}
-.apply-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--green-start),var(--green-end));color:#fff;font-weight:800;font-size:16px;padding:14px 24px;border-radius:30px;box-shadow:0 4px 12px rgba(0,0,0,0.2);border:none;cursor:pointer;z-index:10;width:90%;max-width:400px;}
-.footer{background:#22182a;color:#fff;padding:20px;font-size:14px;text-align:center;margin-top:16px;}
-@media screen and (max-width:480px){.headline{font-size:16px}.sub{font-size:13px}.hero{font-size:16px;padding:16px}.apply-btn{font-size:14px;padding:12px}}
+input[type=range]{width:100%;}
+
+/* RESULTS */
+.results{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.box{
+  background:var(--green-soft);
+  padding:12px;
+  border-radius:12px;
+}
+.label{font-size:12px;color:var(--text-muted);}
+.value{font-weight:800;}
+
+/* BREAKDOWN */
+.breakdown{
+  margin-top:16px;
+  background:#f9fcfb;
+  border-radius:12px;
+  padding:14px;
+}
+.breakdown h4{margin:0 0 10px;color:var(--green-dark);}
+.row{display:flex;justify-content:space-between;margin:6px 0;}
+
+/* IMAGE SECTION */
+.image-section img{
+  width:100%;
+  border-radius:14px;
+  opacity:0;
+  transform:translateY(30px) scale(.95);
+  transition:.6s ease;
+}
+.image-section.show img{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+/* CONTACT LINK */
+.contact-link{
+  text-decoration:none;
+  color:var(--green-dark);
+  font-weight:800;
+}
+.contact-link:hover{text-decoration:underline;}
+
+/* FOOTER */
+.app-footer{
+  background:#fff;
+  padding:28px 18px;
+  margin-top:20px;
+}
+.footer-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+}
+.footer-logo{font-size:26px;font-weight:800;}
+.footer-socials a{margin-left:10px;}
+.footer-socials img{
+  width:34px;
+  opacity:.85;
+  transition:.3s;
+}
+.footer-socials img:hover{
+  opacity:1;
+  transform:scale(1.1);
+}
+.footer-block{margin-bottom:24px;}
+.footer-block h4{font-size:20px;margin-bottom:12px;}
+.footer-item{font-size:16px;color:#666;margin:10px 0;}
+.footer-links a{
+  display:block;
+  font-size:16px;
+  color:#777;
+  margin:12px 0;
+  text-decoration:none;
+}
+.footer-links a:hover{color:var(--green-dark);}
+.footer-bottom{
+  text-align:center;
+  font-size:14px;
+  color:#999;
+}
+
+/* STICKY */
+.sticky{
+  position:fixed;
+  bottom:12px;
+  left:12px;
+  right:12px;
+}
+.apply{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(90deg,var(--green),var(--green-dark));
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:800;
+}
 </style>
 </head>
+
 <body>
-<div class="app">
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo-mark">Z</div>
-      <div>
-        <div class="brand-text">Zycredit</div>
-        <div style="font-size:12px;color:var(--muted)">ඔබේ මුදල් සවන්ද</div>
-      </div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-box">
+      <img src="https://i.ibb.co/tpdL9dRK/Chat-GPT-Image-Dec-22-2025-11-21-52-AM.png" alt="eZycredit Logo">
+    </div>
+    <div>
+      <strong>eZycredit</strong><br>
+      <small style="color:var(--text-muted)">ඔබේ විශ්වාසදායක ණය සහකරු</small>
+    </div>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<div class="card">
+  <div class="hero">ක්ෂණික මුදල් රු.500,000 දක්වා</div>
+
+  <div class="amount">
+    <span>ණය මුදල</span>
+    <span>රු <span id="amt">500,000</span></span>
+  </div>
+  <input type="range" min="30000" max="500000" step="10000" value="500000" id="amountRange">
+
+  <div class="amount">
+    <span>කාලය</span>
+    <span><span id="mVal">12</span> මාස</span>
+  </div>
+  <input type="range" min="6" max="24" step="3" value="12" id="monthRange">
+
+  <div class="results">
+    <div class="box">
+      <div class="label">පොලී අනුපාතය</div>
+      <div class="value">0.833% (මාසික)</div>
+    </div>
+    <div class="box">
+      <div class="label">මාසික වාරිකය</div>
+      <div class="value" id="monthly"></div>
+    </div>
+    <div class="box">
+      <div class="label">කාලය</div>
+      <div class="value" id="months"></div>
+    </div>
+    <div class="box">
+      <div class="label">මුළු ගෙවීම</div>
+      <div class="value" id="total"></div>
     </div>
   </div>
 
-  <div class="scroll-container">
-    <div class="card">
-      <div class="headline">ක්ෂණික මුදල් රු. 500,000 දක්වා</div>
-      <div class="sub">ඇප්ලයි කරන්න, විනාඩි කිහිපයකින් මුදල් ලබාගන්න.</div>
-      <div class="hero" id="hero">සරල හා වේගවත්</div>
+  <div class="breakdown">
+    <h4>Finance Breakdown</h4>
+    <div class="row"><span>ණය මුදල</span><strong id="bLoan"></strong></div>
+    <div class="row"><span>මුළු පොලිය</span><strong id="bInterest"></strong></div>
+    <div class="row"><span>මාසික වාරිකය</span><strong id="bMonthly"></strong></div>
+    <div class="row"><span>මුළු ගෙවීම</span><strong id="bTotal"></strong></div>
+  </div>
+</div>
 
-      <div class="slider-row">
-        <div class="amount-display">
-          <div class="label">ණය මුදල</div>
-          <div class="value">රු <span id="amountText">30,000</span></div>
-        </div>
-        <input id="amountRange" type="range" min="30000" max="500000" step="10000" value="30000"/>
-      </div>
+<!-- IMAGE -->
+<div class="card image-section">
+  <img src="https://i.ibb.co/q38fVhYM/IMG-0484.png">
+</div>
 
-      <div class="results">
-        <div class="result-box">
-          <div class="r-label">මුදල් ලබාගන්න දිනය</div>
-          <div class="r-value" id="applyDate">-</div>
-        </div>
-        <div class="result-box">
-          <div class="r-label">පළමු වාරිකය ගෙවිය යුතු දිනය</div>
-          <div class="r-value" id="firstDueDate">-</div>
-        </div>
-        <div class="result-box">
-          <div class="r-label">අවසන් වාරික දිනය</div>
-          <div class="r-value" id="lastDueDate">-</div>
-        </div>
-        <div class="result-box">
-          <div class="r-label">මාසික වාරිකය</div>
-          <div class="r-value" id="monthlyValue">රු 0</div>
-        </div>
-        <div class="result-box">
-          <div class="r-label">සම්පූර්ණ ගෙවිය යුතු මුදල</div>
-          <div class="r-value" id="totalPayable">රු 0</div>
-        </div>
-        <div class="result-box">
-          <div class="r-label">මුළු පොලිය</div>
-          <div class="r-value" id="totalInterest">රු 0</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      📞 0740436005 <br> ©️ 2024 - 2025 Zycredit Pvt Ltd
+<!-- FOOTER -->
+<footer class="app-footer">
+  <div class="footer-head">
+    <div class="footer-logo">eZycredit</div>
+    <div class="footer-socials">
+      <a href="https://www.facebook.com/share/16uF28yLQD/?mibextid=wwXIfr" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+      </a>
+      <a href="https://www.instagram.com/" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+      </a>
     </div>
   </div>
 
-  <button class="apply-btn" onclick="window.open('https://forms.gle/axZ8a9Uje5NqNFmcA','_blank')">අයදුම් කරන්න</button>
+  <div class="footer-block">
+    <h4>Contacts</h4>
+    <div class="footer-item">
+      📞 <a href="tel:0740436005" class="contact-link">074 043 6005</a>
+    </div>
+    <div class="footer-item">✉️ info@eZycredit.lk</div>
+    <div class="footer-item">🕒 Mon – Sat : 9 am – 9 pm</div>
+  </div>
+
+  <div class="footer-bottom">© 2025 All Rights Reserved</div>
+</footer>
+
+<div class="sticky">
+  <button class="apply">Apply Now</button>
 </div>
 
 <script>
-const fmt=n=>n.toLocaleString('en-US');
-const amountRange=document.getElementById('amountRange');
-const amountText=document.getElementById('amountText');
-const totalPayable=document.getElementById('totalPayable');
-const totalInterest=document.getElementById('totalInterest');
-const monthlyValue=document.getElementById('monthlyValue');
-const firstDueDate=document.getElementById('firstDueDate');
-const lastDueDate=document.getElementById('lastDueDate');
-const applyDateEl=document.getElementById('applyDate');
+const amountRange=document.getElementById("amountRange");
+const monthRange=document.getElementById("monthRange");
+const amt=document.getElementById("amt");
+const mVal=document.getElementById("mVal");
+const monthly=document.getElementById("monthly");
+const total=document.getElementById("total");
+const months=document.getElementById("months");
+const bLoan=document.getElementById("bLoan");
+const bInterest=document.getElementById("bInterest");
+const bMonthly=document.getElementById("bMonthly");
+const bTotal=document.getElementById("bTotal");
 
-function getMonths(amount){
-  if(amount>=30000 && amount<70000) return 4;
-  else if(amount>=70000 && amount<120000) return 12;
-  else if(amount>=120000 && amount<200000) return 16;
-  else if(amount>=200000 && amount<=500000) return 24;
-  else return 12;
+function calc(){
+  const P=+amountRange.value;
+  const n=+monthRange.value;
+  const r=0.00833;
+  const emi=Math.round(P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1));
+  const totalPay=emi*n;
+  const interest=totalPay-P;
+
+  amt.innerText=P.toLocaleString();
+  mVal.innerText=n;
+  months.innerText=n+" මාස";
+  monthly.innerText="රු "+emi.toLocaleString();
+  total.innerText="රු "+totalPay.toLocaleString();
+
+  bLoan.innerText="රු "+P.toLocaleString();
+  bInterest.innerText="රු "+interest.toLocaleString();
+  bMonthly.innerText="රු "+emi.toLocaleString();
+  bTotal.innerText="රු "+totalPay.toLocaleString();
 }
+amountRange.oninput=calc;
+monthRange.oninput=calc;
+calc();
 
-function calculate(amount){
-  const months = getMonths(amount);
-  const ratePerMonth=0.005;
-  const totalInterestVal=Math.round(amount * ratePerMonth * months);
-  const total=amount + totalInterestVal;
-  const monthly=total/months;
-  return {monthly,total,totalInterestVal,months};
-}
-
-function addMonthsKeepDay(date, months){
-  const d=new Date(date.getTime());
-  const day=d.getDate();
-  d.setMonth(d.getMonth()+months);
-  if(d.getDate()!==day) d.setDate(0);
-  return d;
-}
-
-function animateValue(el,start,end,duration){
-  let startTime=null;
-  function animate(currentTime){
-    if(!startTime) startTime=currentTime;
-    const progress=Math.min((currentTime-startTime)/duration,1);
-    el.textContent='රු '+Math.round(progress*(end-start)+start).toLocaleString('en-US');
-    if(progress<1) requestAnimationFrame(animate);
-  }
-  requestAnimationFrame(animate);
-}
-
-function updateAll(){
-  const amt=Number(amountRange.value);
-  amountText.textContent=fmt(amt);
-
-  const {monthly,total,totalInterestVal,months}=calculate(amt);
-
-  totalPayable.textContent='රු '+fmt(total);
-  totalInterest.textContent='රු '+fmt(totalInterestVal);
-  animateValue(monthlyValue,parseInt(monthlyValue.textContent.replace(/\D/g,'')),monthly,500);
-
-  const today=new Date();
-  applyDateEl.textContent=today.toLocaleDateString('si-LK',{year:'numeric',month:'long',day:'numeric'});
-
-  const firstDue=addMonthsKeepDay(today,1);
-  firstDueDate.textContent=firstDue.toLocaleDateString('si-LK',{year:'numeric',month:'long',day:'numeric'});
-
-  const lastDue=addMonthsKeepDay(today,months);
-  lastDueDate.textContent=lastDue.toLocaleDateString('si-LK',{year:'numeric',month:'long',day:'numeric'});
-}
-
-amountRange.addEventListener('input',updateAll);
-updateAll();
+/* image animation */
+const img=document.querySelector(".image-section");
+new IntersectionObserver(e=>{
+  if(e[0].isIntersecting) img.classList.add("show");
+}).observe(img);
 </script>
+
 </body>
 </html>
