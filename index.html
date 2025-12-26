@@ -17,13 +17,17 @@
   --text-muted:#8b98a0;
 }
 
-*{box-sizing:border-box;}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
 body{
   margin:0;
   font-family:"Segoe UI","Noto Sans Sinhala",sans-serif;
   background:var(--bg);
   color:var(--text-main);
-  padding-bottom:120px;
+  padding-bottom:130px;
 }
 
 /* TOP BAR */
@@ -40,17 +44,12 @@ body{
 .logo{display:flex;gap:10px;align-items:center;}
 .logo-box{
   width:42px;height:42px;
-  background:#fff;
   border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
 .logo-box img{
   width:100%;
   height:100%;
   object-fit:contain;
-  border-radius:10px;
 }
 
 /* CARD */
@@ -79,7 +78,20 @@ body{
   font-weight:700;
   margin:16px 0 6px;
 }
-input[type=range]{width:100%;}
+input[type=range]{
+  width:100%;
+  -webkit-appearance:none;
+  height:6px;
+  border-radius:6px;
+  background:#dff4ec;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 4px 10px rgba(22,193,114,.45);
+}
 
 /* RESULTS */
 .results{
@@ -111,12 +123,12 @@ input[type=range]{width:100%;}
   width:100%;
   border-radius:14px;
   opacity:0;
-  transform:translateY(30px) scale(.95);
+  transform:translateY(30px);
   transition:.6s ease;
 }
 .image-section.show img{
   opacity:1;
-  transform:translateY(0) scale(1);
+  transform:translateY(0);
 }
 
 /* FOOTER */
@@ -125,21 +137,41 @@ input[type=range]{width:100%;}
   padding:28px 18px;
   margin-top:20px;
 }
-.footer-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:24px;
-}
-.footer-logo{font-size:26px;font-weight:800;}
-.footer-socials img{
-  width:34px;
-  margin-left:10px;
-}
-.footer-item{margin:10px 0;color:#666;}
-.footer-bottom{text-align:center;color:#999;font-size:14px;}
 
-/* ===== APP STYLE STICKY BUTTON ===== */
+/* CONTACT – SELECT & TAP ENABLE */
+.footer-item,
+.footer-item a{
+  user-select:text !important;
+  -webkit-user-select:text !important;
+  touch-action:auto;
+}
+
+.footer-item{
+  margin:10px 0;
+  font-size:16px;
+  color:#666;
+}
+
+.footer-item a{
+  display:inline-block;
+  padding:6px 0;
+  font-weight:800;
+  color:var(--green-dark);
+  text-decoration:none;
+}
+
+.footer-item a:hover{
+  text-decoration:underline;
+}
+
+.footer-bottom{
+  text-align:center;
+  font-size:14px;
+  color:#999;
+  margin-top:20px;
+}
+
+/* STICKY APPLY BUTTON */
 .sticky{
   position:fixed;
   bottom:16px;
@@ -161,18 +193,10 @@ input[type=range]{width:100%;}
   text-align:center;
   display:block;
   box-shadow:0 12px 28px rgba(22,193,114,.35);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  animation:slideUp .6s ease;
-  transition:.2s ease;
+  transition:.2s;
 }
 .apply:active{
   transform:scale(.96);
-  box-shadow:0 6px 16px rgba(22,193,114,.4);
-}
-@keyframes slideUp{
-  from{opacity:0;transform:translateY(30px);}
-  to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
@@ -227,6 +251,16 @@ input[type=range]{width:100%;}
 </div>
 
 <footer class="app-footer">
+  <div class="footer-item">
+    📞 <a href="tel:0740436005">074 043 6005</a>
+  </div>
+  <div class="footer-item">
+    ✉️ <a href="mailto:info@eZycredit.lk">info@eZycredit.lk</a>
+  </div>
+  <div class="footer-item">
+    💬 <a href="https://wa.me/94740436005">WhatsApp Chat</a>
+  </div>
+
   <div class="footer-bottom">© 2025 eZycredit</div>
 </footer>
 
@@ -244,16 +278,18 @@ function calc(){
   const r=0.00833;
   const emi=Math.round(P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1));
   const totalPay=emi*n;
-  document.getElementById("amt").innerText=P.toLocaleString();
-  document.getElementById("mVal").innerText=n;
-  document.getElementById("monthly").innerText="රු "+emi.toLocaleString();
-  document.getElementById("total").innerText="රු "+totalPay.toLocaleString();
-  document.getElementById("months").innerText=n+" මාස";
-  document.getElementById("bLoan").innerText="රු "+P.toLocaleString();
-  document.getElementById("bInterest").innerText="රු "+(totalPay-P).toLocaleString();
-  document.getElementById("bMonthly").innerText="රු "+emi.toLocaleString();
-  document.getElementById("bTotal").innerText="රු "+totalPay.toLocaleString();
+
+  amt.innerText=P.toLocaleString();
+  mVal.innerText=n;
+  monthly.innerText="රු "+emi.toLocaleString();
+  total.innerText="රු "+totalPay.toLocaleString();
+  months.innerText=n+" මාස";
+  bLoan.innerText="රු "+P.toLocaleString();
+  bInterest.innerText="රු "+(totalPay-P).toLocaleString();
+  bMonthly.innerText="රු "+emi.toLocaleString();
+  bTotal.innerText="රු "+totalPay.toLocaleString();
 }
+
 amountRange.oninput=calc;
 monthRange.oninput=calc;
 calc();
