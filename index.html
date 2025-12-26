@@ -18,12 +18,13 @@
 }
 
 *{box-sizing:border-box;}
+
 body{
   margin:0;
   font-family:"Segoe UI","Noto Sans Sinhala",sans-serif;
   background:var(--bg);
   color:var(--text-main);
-  padding-bottom:110px; /* sticky button space */
+  padding-bottom:120px; /* FIX: space for sticky button */
 }
 
 /* TOPBAR */
@@ -119,13 +120,20 @@ input[type=range]{width:100%;}
   transform:translateY(0) scale(1);
 }
 
-/* CONTACT LINK */
+/* CONTACT */
 .contact-link{
   text-decoration:none;
   color:var(--green-dark);
   font-weight:800;
 }
 .contact-link:hover{text-decoration:underline;}
+
+/* allow selection */
+.footer-item,
+.footer-item a{
+  user-select:text;
+  -webkit-user-select:text;
+}
 
 /* FOOTER */
 .app-footer{
@@ -159,23 +167,16 @@ input[type=range]{width:100%;}
   color:#999;
 }
 
-/* ===== FIX 1: CONTACTS SELECT ENABLE ===== */
-.footer-item,
-.footer-item a{
-  user-select:text;
-  -webkit-user-select:text;
-}
-
-/* ===== FIX 2: CENTER STICKY APPLY BUTTON ===== */
+/* STICKY APPLY – CENTER FIX */
 .sticky{
   position:fixed;
-  bottom:12px;
+  bottom:16px;
   left:50%;
   transform:translateX(-50%);
   width:100%;
   max-width:420px;
   padding:0 14px;
-  z-index:20;
+  z-index:999;
 }
 .apply{
   width:100%;
@@ -187,6 +188,8 @@ input[type=range]{width:100%;}
   font-size:18px;
   font-weight:800;
   text-align:center;
+  display:block;
+  text-decoration:none;
 }
 </style>
 </head>
@@ -197,7 +200,7 @@ input[type=range]{width:100%;}
 <div class="topbar">
   <div class="logo">
     <div class="logo-box">
-      <img src="https://i.ibb.co/tpdL9dRK/Chat-GPT-Image-Dec-22-2025-11-21-52-AM.png" alt="eZycredit Logo">
+      <img src="https://i.ibb.co/tpdL9dRK/Chat-GPT-Image-Dec-22-2025-11-21-52-AM.png">
     </div>
     <div>
       <strong>eZycredit</strong><br>
@@ -260,7 +263,7 @@ input[type=range]{width:100%;}
   <div class="footer-head">
     <div class="footer-logo">eZycredit</div>
     <div class="footer-socials">
-      <a href="https://www.facebook.com/share/16uF28yLQD/?mibextid=wwXIfr" target="_blank">
+      <a href="https://www.facebook.com/share/16uF28yLQD/" target="_blank">
         <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
       </a>
       <a href="https://www.instagram.com/" target="_blank">
@@ -280,9 +283,10 @@ input[type=range]{width:100%;}
     <div class="footer-item">🕒 Mon – Sat : 9 am – 9 pm</div>
   </div>
 
-  <div class="footer-bottom">©️ 2025 All Rights Reserved</div>
+  <div class="footer-bottom">© 2025 All Rights Reserved</div>
 </footer>
 
+<!-- APPLY -->
 <div class="sticky">
   <a href="https://forms.gle/cCGpY8DD3F4epaPd9" class="apply">Apply Now</a>
 </div>
@@ -323,7 +327,6 @@ amountRange.oninput=calc;
 monthRange.oninput=calc;
 calc();
 
-/* image animation */
 const img=document.querySelector(".image-section");
 new IntersectionObserver(e=>{
   if(e[0].isIntersecting) img.classList.add("show");
